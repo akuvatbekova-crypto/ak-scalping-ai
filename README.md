@@ -1,38 +1,55 @@
-# AK Scalping AI
+# AK Scalping AI v2
 
-Telegram + TradingView webhook assistant for XAUUSD scalping.
+TradingView → Railway → Telegram.
+
+## Что изменилось
+
+- `/webhook` отвечает на GET и POST.
+- Бот принимает JSON и обычный текст.
+- Бот понимает `buy`, `sell`, `long`, `short`, `купить`, `продать`, `лонг`, `шорт`.
+- Есть тест Telegram: `/telegram/test`.
 
 ## Railway variables
 
-Add these variables in Railway:
+Обязательные:
+- `TELEGRAM_BOT_TOKEN`
+- `TELEGRAM_CHAT_ID`
 
-- `TELEGRAM_BOT_TOKEN` — token from BotFather
-- `TELEGRAM_CHAT_ID` — your Telegram chat id
-- `WEBHOOK_SECRET` — any private word, for example `ak2026secret`
+Опционально:
+- `WEBHOOK_SECRET`
 
-## Test endpoints
+Если `WEBHOOK_SECRET` заполнен, в TradingView message добавляйте:
 
-- `GET /` — health text
-- `POST /telegram/test` — sends test message to Telegram
-- `POST /webhook` — receives TradingView alert JSON
+```json
+"secret": "ваш_секрет"
+```
 
-## TradingView alert JSON example
+## TradingView Message BUY
 
 ```json
 {
-  "secret": "ak2026secret",
-  "symbol": "XAUUSD",
-  "timeframe": "M5",
-  "close": "4041.88",
-  "high": "4042.90",
-  "low": "4038.14",
+  "secret": "AKScalping2026Secret",
+  "symbol": "{{ticker}}",
+  "timeframe": "{{interval}}",
+  "price": "{{close}}",
+  "high": "{{high}}",
+  "low": "{{low}}",
   "trend": "buy",
-  "zone_low": "4037.00",
-  "zone_high": "4040.00",
-  "note": "Breakout and retest zone"
+  "note": "BUY alert"
 }
 ```
 
-## Important
+## TradingView Message SELL
 
-This bot is an assistant only. It does not guarantee profit and does not open trades automatically.
+```json
+{
+  "secret": "AKScalping2026Secret",
+  "symbol": "{{ticker}}",
+  "timeframe": "{{interval}}",
+  "price": "{{close}}",
+  "high": "{{high}}",
+  "low": "{{low}}",
+  "trend": "sell",
+  "note": "SELL alert"
+}
+```
